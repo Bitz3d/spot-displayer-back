@@ -1,14 +1,13 @@
 package pl.rafalab.spotdisplayer.Controllers;
 
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@RequestMapping("/")
+@RequestMapping("/api/")
 public class HomeController {
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = "/admin ",method = RequestMethod.GET)
     @ResponseBody
     @Secured("ADMIN")
     public String hello(){
