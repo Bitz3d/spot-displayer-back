@@ -8,7 +8,7 @@ import pl.rafalab.spotdisplayer.security.JwtGenerator;
 @RequestMapping("/token")
 public class TokenController {
 
-    JwtGenerator jwtGenerator;
+    private JwtGenerator jwtGenerator;
 
     public TokenController(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;

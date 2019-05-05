@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/")
 public class HomeController {
 
+
     @RequestMapping(value = "/admin ",method = RequestMethod.GET)
     @ResponseBody
     @Secured("ADMIN")
@@ -18,6 +19,7 @@ public class HomeController {
     @ResponseBody
     @Secured("USER")
     public String okhello(){
+
         return "Anita NIE JEST PIEKNA";
     }
 

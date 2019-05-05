@@ -26,7 +26,7 @@ public class JwtValidator {
 
         myUser.setUsername(body.getSubject());
         myUser.setId(Long.parseLong((String) body.get("userId")));
-        myUser.setRole((String) body.get("role"));
+//        myUser.setRoles((String) body.get("role"));
         }
         catch (Exception e) {
             e.printStackTrace();
