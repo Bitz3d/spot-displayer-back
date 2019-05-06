@@ -1,6 +1,6 @@
 package pl.rafalab.spotdisplayer.Controllers;
 
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
 
 
-    @RequestMapping(value = "/admin ",method = RequestMethod.GET)
+    @RequestMapping(value = "/admin",method = RequestMethod.GET)
     @ResponseBody
-    @Secured("ADMIN")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String hello(){
-        return "Anita jest piękna";
+        return "Test admin";
     }
 
     @RequestMapping(value = "/user",method = RequestMethod.GET)
     @ResponseBody
-    @Secured("USER")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String okhello(){
 
-        return "Anita NIE JEST PIEKNA";
+        return "test user";
     }
 
 

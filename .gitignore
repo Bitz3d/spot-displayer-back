@@ -28,7 +28,7 @@ HELP.md
 ### VS Code ###
 .vscode/
 
-config.properties
+src/main/resources/config.properties
 
 mvnw.cmd
 mvnw

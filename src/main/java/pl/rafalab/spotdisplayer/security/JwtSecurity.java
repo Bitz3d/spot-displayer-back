@@ -20,15 +20,12 @@ import pl.rafalab.spotdisplayer.Services.MyUserService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class JwtSecurity extends WebSecurityConfigurerAdapter {
 
-
-    private JwtAuthenticationProvider authenticationProvider;
-    private JwtAuthenticationEntryPoint entryPoint;
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
     private MyUserService myUserService;
     private PasswordEncoder encoder;
 
-    public JwtSecurity(JwtAuthenticationProvider authenticationProvider, JwtAuthenticationEntryPoint entryPoint, MyUserService myUserService, PasswordEncoder encoder) {
-        this.authenticationProvider = authenticationProvider;
-        this.entryPoint = entryPoint;
+    public JwtSecurity(JwtAuthenticationEntryPoint entryPoint, MyUserService myUserService, PasswordEncoder encoder) {
+        this.unauthorizedHandler = entryPoint;
         this.myUserService = myUserService;
         this.encoder = encoder;
     }
@@ -41,11 +38,14 @@ public class JwtSecurity extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilter() throws Exception {
-        JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
-        filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
-        return filter;
+    public JwtAuthenticationTokenFilter authenticationTokenFilter() {
+        //TODO punkt newraligczny
+        TokenProvider tokenProvider = new TokenProvider();
+//        JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter(myUserService,tokenProvider);
+////        filter.setAuthenticationManager(authenticationManager());
+////        filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
+
+        return new JwtAuthenticationTokenFilter(myUserService,tokenProvider);
     }
 
 
@@ -57,15 +57,27 @@ public class JwtSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers("**/api/**").authenticated()
+//        http.csrf().disable()
+//                .authorizeRequests().antMatchers("**/api/**").authenticated()
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(entryPoint)
+//                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//        http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//
+//        http.headers().cacheControl();
+
+        http.cors().and().csrf().disable().
+                authorizeRequests()
+                .antMatchers("/token/*", "/signup").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(entryPoint)
-                .and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http
+                .addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.headers().cacheControl();
     }
 }

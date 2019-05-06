@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
+import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
 import pl.rafalab.spotdisplayer.model.MyUser;
 
 import javax.transaction.Transactional;
@@ -45,9 +46,8 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
         //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
-
     @Override
-    public MyUser save(MyUser user) {
+    public MyUser save(MyUserDto user) {
         MyUser newUser = new MyUser();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(encoder.encode(user.getPassword()));
