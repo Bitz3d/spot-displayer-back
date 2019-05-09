@@ -18,12 +18,10 @@ public class TokenController {
 
     private TokenProvider tokenProvider;
     private AuthenticationManager authenticationManager;
-    private MyUserService myUserService;
 
-    public TokenController(TokenProvider tokenProvider, AuthenticationManager authenticationManager, MyUserService myUserService) {
+    public TokenController(TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
-        this.myUserService = myUserService;
     }
 
     @PostMapping("/generate-token")

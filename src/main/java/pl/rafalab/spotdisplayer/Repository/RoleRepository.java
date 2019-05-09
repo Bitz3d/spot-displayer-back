@@ -6,4 +6,6 @@ import pl.rafalab.spotdisplayer.model.MyRole;
 
 @Repository
 public interface RoleRepository extends JpaRepository<MyRole, Integer> {
+
+    MyRole findByRole(String roleName);
 }

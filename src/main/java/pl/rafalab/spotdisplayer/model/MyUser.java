@@ -4,8 +4,7 @@ package pl.rafalab.spotdisplayer.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Data
@@ -20,11 +19,11 @@ public class MyUser {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotEmpty
     @Column(unique = true)
     private String username;
 
-    @NotBlank
+    @NotEmpty
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -32,6 +31,15 @@ public class MyUser {
             @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     private Set<MyRole> roles;
+
+
+//    @OneToMany(
+//            mappedBy = "form",
+//            cascade = CascadeType.ALL,
+//            fetch = FetchType.EAGER
+//    )
+//    @Column(name = "welding_spots")
+//    private Set<WeldingSot> weldingSots;
 
 }
 
