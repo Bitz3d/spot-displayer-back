@@ -6,10 +6,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import pl.rafalab.spotdisplayer.Services.MyUserService;
-import pl.rafalab.spotdisplayer.model.AuthToken;
-import pl.rafalab.spotdisplayer.model.LoginUser;
-import pl.rafalab.spotdisplayer.model.MyUser;
+import pl.rafalab.spotdisplayer.Models.AuthToken;
+import pl.rafalab.spotdisplayer.Models.LoginUser;
 import pl.rafalab.spotdisplayer.security.TokenProvider;
 
 @RestController

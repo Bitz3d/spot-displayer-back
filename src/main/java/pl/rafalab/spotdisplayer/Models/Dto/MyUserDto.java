@@ -1,7 +1,7 @@
-package pl.rafalab.spotdisplayer.model.Dto;
+package pl.rafalab.spotdisplayer.Models.Dto;
 
 import lombok.Data;
-import pl.rafalab.spotdisplayer.model.MyRole;
+import pl.rafalab.spotdisplayer.Models.MyRole;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;

@@ -1,8 +1,8 @@
 package pl.rafalab.spotdisplayer.Services;
 
 import org.springframework.stereotype.Service;
-import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
-import pl.rafalab.spotdisplayer.model.MyUser;
+import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.MyUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,5 @@ public interface MyUserService {
     List<MyUser> findAll();
     void delete(long id);
     MyUser findOne(String username);
-
     Optional<MyUser> findById(Long id);
 }

@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.rafalab.spotdisplayer.Controllers.UserController;
-import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
-import pl.rafalab.spotdisplayer.model.MyRole;
+import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.MyRole;
 
 import java.io.IOException;
 import java.util.HashSet;

@@ -1,7 +1,7 @@
 package pl.rafalab.spotdisplayer.Services;
 
 import org.springframework.stereotype.Service;
-import pl.rafalab.spotdisplayer.model.MyRole;
+import pl.rafalab.spotdisplayer.Models.MyRole;
 
 @Service
 public interface RoleService {
