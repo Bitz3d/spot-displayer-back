@@ -39,13 +39,8 @@ public class JwtSecurity extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilter() {
-        //TODO punkt newraligczny
         TokenProvider tokenProvider = new TokenProvider();
-//        JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter(myUserService,tokenProvider);
-////        filter.setAuthenticationManager(authenticationManager());
-////        filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
-
-        return new JwtAuthenticationTokenFilter(myUserService,tokenProvider);
+        return new JwtAuthenticationTokenFilter(myUserService, tokenProvider);
     }
 
 
@@ -57,17 +52,6 @@ public class JwtSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeRequests().antMatchers("**/api/**").authenticated()
-//                .and()
-//                .exceptionHandling().authenticationEntryPoint(entryPoint)
-//                .and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        http.headers().cacheControl();
-
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers("/token/*", "/signup").permitAll()

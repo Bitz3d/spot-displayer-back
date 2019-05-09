@@ -1,6 +1,5 @@
 package pl.rafalab.spotdisplayer.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

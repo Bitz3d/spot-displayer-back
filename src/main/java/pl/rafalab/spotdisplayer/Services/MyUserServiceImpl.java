@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
+import pl.rafalab.spotdisplayer.Repository.RoleRepository;
 import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.model.MyRole;
 import pl.rafalab.spotdisplayer.model.MyUser;
 
 import javax.transaction.Transactional;
@@ -20,10 +22,12 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
 
     private MyUserRepository myUserRepository;
     private PasswordEncoder encoder;
+    private RoleRepository roleRepository;
 
-    public MyUserServiceImpl(MyUserRepository myUserRepository, PasswordEncoder encoder) {
+    public MyUserServiceImpl(MyUserRepository myUserRepository, PasswordEncoder encoder,RoleRepository roleRepository) {
         this.myUserRepository = myUserRepository;
         this.encoder = encoder;
+        this.roleRepository=roleRepository;
     }
 
     @Override
@@ -39,11 +43,9 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
     private Set<SimpleGrantedAuthority> getAuthority(MyUser user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
-            //authorities.add(new SimpleGrantedAuthority(role.getName()));
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole()));
         });
         return authorities;
-        //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override
@@ -51,14 +53,21 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
         MyUser newUser = new MyUser();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(encoder.encode(user.getPassword()));
+        newUser.setRoles(getUserRoles());
+        System.out.println(newUser.toString());
         return myUserRepository.save(newUser);
+    }
+
+    private Set<MyRole> getUserRoles() {
+        Set<MyRole> myRoles = new HashSet<>();
+        MyRole myRole = roleRepository.findByRole("USER");
+        myRoles.add(myRole);
+        return myRoles;
     }
 
     @Override
     public List<MyUser> findAll() {
-        List<MyUser> myUsers = new ArrayList<>();
-        myUserRepository.findAll().iterator().forEachRemaining(myUsers::add);
-        return myUsers;
+        return myUserRepository.findAll();
     }
 
     @Override
@@ -68,6 +77,13 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
 
     @Override
     public MyUser findOne(String username) {
+
+        MyUser myUser = myUserRepository.findByUsername(username);
+
+        if (myUser == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+
         return myUserRepository.findByUsername(username);
     }
 

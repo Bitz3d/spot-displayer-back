@@ -1,9 +1,13 @@
 package pl.rafalab.spotdisplayer.Controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.rafalab.spotdisplayer.Services.MyUserService;
 import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
 import pl.rafalab.spotdisplayer.model.MyUser;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -15,8 +19,11 @@ public class UserController {
         this.myUserService = myUserService;
     }
 
-    @RequestMapping(value="/signup", method = RequestMethod.POST)
-    public MyUser saveUser(@RequestBody MyUserDto user){
-        return myUserService.save(user);
+    @PostMapping("/signup")
+    public ResponseEntity<MyUser> saveUser(@RequestBody  @Valid MyUserDto user){
+
+        MyUser save = myUserService.save(user);
+
+        return  new ResponseEntity<>(save, HttpStatus.OK);
     }
 }
