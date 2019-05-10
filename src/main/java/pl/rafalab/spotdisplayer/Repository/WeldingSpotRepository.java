@@ -11,9 +11,10 @@ import java.util.Optional;
 @Repository
 public interface WeldingSpotRepository extends JpaRepository<WeldingSpot, Long> {
     List<WeldingSpot> findByMyUser(MyUser username);
-    List<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName);
-    List<WeldingSpot> findBySpotName(String spotName);
-    Optional<WeldingSpot> findById(Long id);
-    void updateWeldingSpot(WeldingSpot weldingSpot);
 
+    List<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName);
+
+    List<WeldingSpot> findBySpotName(String spotName);
+
+    Optional<WeldingSpot> findById(Long id);
 }

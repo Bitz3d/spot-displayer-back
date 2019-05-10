@@ -12,5 +12,4 @@ public interface WeldingSpotService {
     List<WeldingSpot> findBySpotName(String spotName);
     List<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName);
     Optional<WeldingSpot> findById(Long id);
-    void updateWeldingSpot(WeldingSpot weldingSpot);
 }

@@ -11,8 +11,8 @@ import java.util.Optional;
 @Service
 public class WeldingSpotServiceImpl implements WeldingSpotService {
 
-    WeldingSpotRepository weldingSpotRepository;
-    MyUserService myUserService;
+    private WeldingSpotRepository weldingSpotRepository;
+    private MyUserService myUserService;
 
     public WeldingSpotServiceImpl(WeldingSpotRepository weldingSpotRepository, MyUserService myUserService) {
         this.weldingSpotRepository = weldingSpotRepository;
@@ -44,8 +44,4 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
         return weldingSpotRepository.findById(id);
     }
 
-    @Override
-    public void updateWeldingSpot(WeldingSpot weldingSpot) {
-        weldingSpotRepository.updateWeldingSpot(weldingSpot);
-    }
 }

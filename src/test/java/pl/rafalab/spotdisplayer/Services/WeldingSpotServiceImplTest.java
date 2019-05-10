@@ -9,7 +9,8 @@ import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
 import pl.rafalab.spotdisplayer.Repository.WeldingSpotRepository;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -24,6 +25,8 @@ public class WeldingSpotServiceImplTest {
     WeldingSpotServiceImpl weldingSpotService;
 
     WeldingSpot weldingSpot;
+
+    List<WeldingSpot> weldingSpotList;
 
     @BeforeEach
     void setUp() {
@@ -42,21 +45,22 @@ public class WeldingSpotServiceImplTest {
                 .robName("ROB12")
                 .build();
 
-
+        weldingSpotList =new ArrayList<>();
+        weldingSpotList.add(weldingSpot);
     }
 
     @Test
-    void test_save_with_correct_data(){
+    void test_save_with_correct_data() {
         when(weldingSpotRepository.save(any())).thenReturn(weldingSpot);
         WeldingSpot returnedWeldingSpot = weldingSpotService.save(weldingSpot);
-        Assertions.assertEquals(returnedWeldingSpot,weldingSpot);
+        Assertions.assertEquals(returnedWeldingSpot, weldingSpot);
     }
 
-//    @Test
-//    void test_find_by_user_with_correct_data(){
-//        when(weldingSpotRepository.findByMyUser(any())).thenReturn(Collections.EMPTY_LIST);
-//        WeldingSpot returnedWeldingSpot = w`eldingSpotService.save(weldingSpot);
-//        Assertions.assertEquals(returnedWeldingSpot,weldingSpot);
-//    }
+    @Test
+    void test_find_by_user_with_correct_data() {
+        when(weldingSpotRepository.findByMyUser(any(MyUser.class))).thenReturn((weldingSpotList));
+        List<WeldingSpot> weldingSpotByUsername = weldingSpotService.findByMyUser(new MyUser());
+        Assertions.assertEquals(weldingSpotList.size(),weldingSpotByUsername .size());
+    }
 
 }

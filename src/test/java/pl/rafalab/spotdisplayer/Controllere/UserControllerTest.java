@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -11,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.rafalab.spotdisplayer.Controllers.UserController;
 import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
 import pl.rafalab.spotdisplayer.Models.MyRole;
+import pl.rafalab.spotdisplayer.Services.MyUserService;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -23,6 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private MockMvc mockMvc;
+    @Mock
+    private MyUserService myUserService;
 
     @InjectMocks
     private UserController userController;
@@ -35,14 +39,6 @@ public class UserControllerTest {
                 .standaloneSetup(userController)
                 .build();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        MyUserDto myUserDto = new MyUserDto();
-        myUserDto.setPassword("password");
-        myUserDto.setUsername("Pawel");
-        myUserDto.setRoles(getUserRoles());
-        jsonNode = objectMapper.writeValueAsString(myUserDto);
-        System.out.println(jsonNode);
     }
 
     private Set<MyRole> getUserRoles() {
@@ -54,6 +50,15 @@ public class UserControllerTest {
 
     @Test
     public void test_save_user_with_correct_data() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        MyUserDto myUserDto = new MyUserDto();
+        myUserDto.setPassword("password");
+        myUserDto.setUsername("Pawel");
+        myUserDto.setRoles(getUserRoles());
+        jsonNode = objectMapper.writeValueAsString(myUserDto);
+
+
         mockMvc.perform(post("/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonNode))
