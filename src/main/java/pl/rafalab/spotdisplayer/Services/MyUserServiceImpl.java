@@ -9,9 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
 import pl.rafalab.spotdisplayer.Repository.RoleRepository;
-import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
-import pl.rafalab.spotdisplayer.model.MyRole;
-import pl.rafalab.spotdisplayer.model.MyUser;
+import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.MyRole;
+import pl.rafalab.spotdisplayer.Models.MyUser;
 
 import javax.transaction.Transactional;
 import java.util.*;

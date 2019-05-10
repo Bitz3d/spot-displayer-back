@@ -10,9 +10,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
 import pl.rafalab.spotdisplayer.Repository.RoleRepository;
-import pl.rafalab.spotdisplayer.model.Dto.MyUserDto;
-import pl.rafalab.spotdisplayer.model.MyRole;
-import pl.rafalab.spotdisplayer.model.MyUser;
+import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.MyRole;
+import pl.rafalab.spotdisplayer.Models.MyUser;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,9 +43,9 @@ public class MyUserServiceImplTest {
     private MyUserDto myUserDto;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         MockitoAnnotations.initMocks(this);
-        myUserService = new MyUserServiceImpl(myUserRepository, encoder,roleRepository);
+        myUserService = new MyUserServiceImpl(myUserRepository, encoder, roleRepository);
 
         myUser = new MyUser();
         myUser.setId(1L);
@@ -68,8 +68,8 @@ public class MyUserServiceImplTest {
         return authorities;
     }
 
-    private List<MyUser> getMyUserList(){
-        List<MyUser> myUsersList =  new ArrayList<>();
+    private List<MyUser> getMyUserList() {
+        List<MyUser> myUsersList = new ArrayList<>();
         myUsersList.add(myUser);
         myUsersList.add(myUser);
         return myUsersList;
@@ -118,7 +118,7 @@ public class MyUserServiceImplTest {
 
         MyUser returnedMyUser = myUserService.save(myUserDto);
 
-        assertEquals(myUser.getUsername(),myUserDto.getUsername());
+        assertEquals(myUser.getUsername(), myUserDto.getUsername());
         assertEquals(myUser.getPassword(), returnedMyUser.getPassword());
         assertEquals(myUser.getId(), returnedMyUser.getId());
         assertEquals(myUser.getRoles().size(), returnedMyUser.getRoles().size());
@@ -129,6 +129,6 @@ public class MyUserServiceImplTest {
     final void test_findAll_user_in_database() {
         when(myUserRepository.findAll()).thenReturn(myUserList);
         List<MyUser> allUsers = myUserService.findAll();
-        assertEquals(allUsers.size(),myUserList.size());
+        assertEquals(allUsers.size(), myUserList.size());
     }
 }

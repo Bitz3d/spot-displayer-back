@@ -1,4 +1,4 @@
-package pl.rafalab.spotdisplayer.model;
+package pl.rafalab.spotdisplayer.Models;
 
 import lombok.*;
 
