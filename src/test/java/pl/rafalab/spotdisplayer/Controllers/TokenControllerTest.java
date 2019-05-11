@@ -1,4 +1,4 @@
-package pl.rafalab.spotdisplayer.Controllere;
+package pl.rafalab.spotdisplayer.Controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import pl.rafalab.spotdisplayer.security.TokenProvider;
 
 import java.io.IOException;
 
-public class TokenController {
+public class TokenControllerTest {
 
     private MockMvc mockMvc;
 
