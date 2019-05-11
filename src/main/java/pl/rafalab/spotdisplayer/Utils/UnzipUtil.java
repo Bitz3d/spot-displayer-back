@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class UnzipUtil {
+public class UnzipUtil implements UnzipFile {
 
     /**
      * Size of the buffer to read/write data
@@ -16,23 +16,22 @@ public class UnzipUtil {
     /**
      * Main unziped files folder
      */
-    private String mainUnzipedFileFolder=null;
+    private String mainUnzipedFileFolder;
 
 
     public String getMainUnzipedFileFolder() {
         return mainUnzipedFileFolder;
     }
 
-    public String unZipFile(MultipartFile files) throws IOException {
+    public String unZipFile(MultipartFile files,String mainUnzipedFileFolder) throws IOException {
 
+        this.mainUnzipedFileFolder=mainUnzipedFileFolder;
 
         //        Make main directory on user dekstop
-        File desktop = new File(System.getProperty("user.home"), "Desktop/zipfiles");
+        File desktop = new File(mainUnzipedFileFolder);
 
-        mainUnzipedFileFolder = desktop.getPath();
         if (!desktop.exists()) {
             desktop.mkdir();
-
         }
 
         final String destDirectory = desktop.getPath() + "/" + files.getOriginalFilename().replace(".zip", "");
