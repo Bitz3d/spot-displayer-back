@@ -1,6 +1,5 @@
 package pl.rafalab.spotdisplayer.Utils;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
@@ -9,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -21,11 +19,13 @@ public abstract class BaseUtil {
     String fileSeparator;
     String compressFilePath;
     String expectedFileLocation = "/home/rafau/someFolder/compressed/rafal.mod";
+    FileCrawler fileCrawler;
 
     @BeforeEach
     void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
         unzipFile = new UnzipUtil();
+        fileCrawler = new FileCrawler();
         fileSeparator = System.getProperty("file.separator");
         String folderName = "someFolder";
         homeDirectory = System.getProperty("user.home") + fileSeparator + folderName;
