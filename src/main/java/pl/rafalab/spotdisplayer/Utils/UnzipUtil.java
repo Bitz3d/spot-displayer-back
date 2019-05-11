@@ -1,11 +1,16 @@
 package pl.rafalab.spotdisplayer.Utils;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Component
 public class UnzipUtil implements UnzipFile {
 
     /**
@@ -23,18 +28,18 @@ public class UnzipUtil implements UnzipFile {
         return mainUnzipedFileFolder;
     }
 
-    public String unZipFile(MultipartFile files,String mainUnzipedFileFolder) throws IOException {
+    public String unZipFile(MultipartFile files, String mainUnzipedFileFolder) throws IOException {
 
-        this.mainUnzipedFileFolder=mainUnzipedFileFolder;
+        this.mainUnzipedFileFolder = mainUnzipedFileFolder;
 
         //        Make main directory on user dekstop
-        File desktop = new File(mainUnzipedFileFolder);
+        File serverToUnzipFolderPath = new File(mainUnzipedFileFolder);
 
-        if (!desktop.exists()) {
-            desktop.mkdir();
+        if (!serverToUnzipFolderPath.exists()) {
+            serverToUnzipFolderPath.mkdir();
         }
 
-        final String destDirectory = desktop.getPath() + "/" + files.getOriginalFilename().replace(".zip", "");
+        final String destDirectory = serverToUnzipFolderPath.getPath() + "/" + files.getOriginalFilename().replace(".zip", "");
         String filePath = null;
         File destDir = new File(destDirectory);
 
@@ -67,6 +72,7 @@ public class UnzipUtil implements UnzipFile {
             entry = zipIn.getNextEntry();
         }
         zipIn.close();
+        Files.deleteIfExists(Paths.get(rarFilePath.getAbsolutePath()));
         return filePath;
     }
 
