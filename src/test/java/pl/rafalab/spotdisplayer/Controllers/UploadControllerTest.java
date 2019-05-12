@@ -2,7 +2,7 @@ package pl.rafalab.spotdisplayer.Controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -12,7 +12,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+import pl.rafalab.spotdisplayer.Utils.FileCrawlerImpl;
+import pl.rafalab.spotdisplayer.Utils.UnzipUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,12 +21,19 @@ class UploadControllerTest {
 
     private MockMvc mockMvc;
 
-    @InjectMocks
+    @Mock
+    private FileCrawlerImpl fileCrawler;
+
+    @Mock
+    private UnzipUtil unzipUtil;
+
+
     private UploadController uploadController;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
+        uploadController = new UploadController(unzipUtil,fileCrawler);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(uploadController)
                 .build();

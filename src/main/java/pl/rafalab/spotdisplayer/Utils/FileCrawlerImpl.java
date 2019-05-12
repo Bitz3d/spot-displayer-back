@@ -1,6 +1,7 @@
 package pl.rafalab.spotdisplayer.Utils;
 
 import org.springframework.stereotype.Component;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class FileCrawler {
+public class FileCrawlerImpl implements FileCrawler {
 
     public List<String> searchFileWithExtension(String folderToSearchPath, String extension) {
         List<String> result = null;

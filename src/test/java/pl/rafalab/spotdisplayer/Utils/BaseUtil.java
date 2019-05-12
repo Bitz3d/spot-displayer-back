@@ -19,13 +19,13 @@ public abstract class BaseUtil {
     String fileSeparator;
     String compressFilePath;
     String expectedFileLocation = "/home/rafau/someFolder/compressed/rafal.mod";
-    FileCrawler fileCrawler;
+    FileCrawlerImpl fileCrawlerImpl;
 
     @BeforeEach
     void setUp() throws IOException {
         MockitoAnnotations.initMocks(this);
         unzipFile = new UnzipUtil();
-        fileCrawler = new FileCrawler();
+        fileCrawlerImpl = new FileCrawlerImpl();
         fileSeparator = System.getProperty("file.separator");
         String folderName = "someFolder";
         homeDirectory = System.getProperty("user.home") + fileSeparator + folderName;

@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -23,28 +27,46 @@ public class UploadController {
     @Value("${target.upload.folder}")
     private String uploadFolder;
 
+    private UnzipFile unzipFile;
+    private FileCrawler fileCrawler;
+
+    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler) {
+        this.unzipFile = unzipFile;
+        this.fileCrawler = fileCrawler;
+    }
+
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity submit(@RequestParam("files") List<MultipartFile> files) {
         AtomicReference<HttpStatus> httpStatus = new AtomicReference<>();
         httpStatus.set(HttpStatus.OK);
+        List<String> listOfUnzipedFiles = new ArrayList<>();
 
         if (files.size() <= 0) {
             httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        makeUploadFolder();
+        File mailUploadFolder = makeUploadFolder();
 
         files.forEach(file -> {
             if ((!file.getOriginalFilename().contains(".zip")) && (!file.getOriginalFilename().contains(".rar"))) {
                 httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
+            } else {
+                try {
+                    listOfUnzipedFiles.add(unzipFile.unZipFile(file, mailUploadFolder.getAbsolutePath()));
+                } catch (IOException e) {
+                    httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
+                    e.printStackTrace();
+                }
             }
         });
+
+        List<String> listOfFoundFiles = fileCrawler.searchFileWithExtension(mailUploadFolder.getAbsolutePath(), ".mod");
 
         return new ResponseEntity(httpStatus.get());
     }
 
-    private void makeUploadFolder() {
+    private File makeUploadFolder() {
         File uploadPlace = new File(System.getProperty("user.home"), uploadFolder);
         if (!uploadPlace.exists()) {
             if (uploadPlace.mkdir()) {
@@ -53,6 +75,7 @@ public class UploadController {
                 logger.error("Folder hasn't been created");
             }
         }
+        return uploadPlace;
     }
 
 }
