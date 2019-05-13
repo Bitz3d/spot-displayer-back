@@ -1,7 +1,8 @@
 package pl.rafalab.spotdisplayer.Utils.Interfaces;
 
+import java.io.File;
 import java.util.List;
 
 public interface FileCrawler {
-    List<String> searchFileWithExtension(String folderToSearchPath, String extension);
+    List<File> searchFileWithExtension(String folderToSearchPath, String extension);
 }

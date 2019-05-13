@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.TextWorker;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
 
 import java.io.File;
@@ -29,10 +30,12 @@ public class UploadController {
 
     private UnzipFile unzipFile;
     private FileCrawler fileCrawler;
+    private TextWorker textWorker;
 
-    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler) {
+    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker) {
         this.unzipFile = unzipFile;
         this.fileCrawler = fileCrawler;
+        this.textWorker = textWorker;
     }
 
     @PostMapping("/upload")
@@ -42,8 +45,8 @@ public class UploadController {
         httpStatus.set(HttpStatus.OK);
         List<String> listOfUnzipedFiles = new ArrayList<>();
 
-        if (files.size() <= 0) {
-            httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
+        if (files.size() <= 0 || files == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         File mailUploadFolder = makeUploadFolder();
@@ -61,7 +64,14 @@ public class UploadController {
             }
         });
 
-        List<String> listOfFoundFiles = fileCrawler.searchFileWithExtension(mailUploadFolder.getAbsolutePath(), ".mod");
+        List<File> listOfFoundFiles = fileCrawler.searchFileWithExtension(mailUploadFolder.getAbsolutePath(), ".mod");
+
+        List<List<String>> listOfWeldingSpotsList = new ArrayList<>();
+        for (File file : listOfFoundFiles) {
+            listOfWeldingSpotsList.add(textWorker.findWeldingSpots(file));
+        }
+
+        listOfWeldingSpotsList.forEach(x -> x.forEach(System.out::println));
 
         return new ResponseEntity(httpStatus.get());
     }
