@@ -32,20 +32,15 @@ public class UnzipUtil implements UnzipFile {
 
         this.mainUnzipedFileFolder = mainUnzipedFileFolder;
 
-        //        Make main directory on user dekstop
-        File serverToUnzipFolderPath = new File(mainUnzipedFileFolder);
+        final String destDirectory = mainUnzipedFileFolder + System.getProperty("file.separator") + files.getOriginalFilename().replace(".zip", "");
 
-        if (!serverToUnzipFolderPath.exists()) {
-            serverToUnzipFolderPath.mkdir();
-        }
-
-        final String destDirectory = serverToUnzipFolderPath.getPath() + "/" + files.getOriginalFilename().replace(".zip", "");
         String filePath = null;
+
         File destDir = new File(destDirectory);
 
 
 //        Trick to move file to server then unzip it.
-        File rarFilePath = new File(files.getOriginalFilename());
+        File rarFilePath = new File(System.getProperty("user.home"),files.getOriginalFilename());
         files.transferTo(rarFilePath);
 
 
@@ -73,7 +68,7 @@ public class UnzipUtil implements UnzipFile {
         }
         zipIn.close();
         Files.deleteIfExists(Paths.get(rarFilePath.getAbsolutePath()));
-        return filePath;
+        return destDirectory;
     }
 
     private void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
