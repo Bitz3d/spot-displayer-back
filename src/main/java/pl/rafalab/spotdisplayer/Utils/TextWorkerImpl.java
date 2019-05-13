@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 @Component
 public class TextWorkerImpl implements TextWorker {
 
-
     @Override
     public List<String> findWeldingSpots(File modFile) {
 
