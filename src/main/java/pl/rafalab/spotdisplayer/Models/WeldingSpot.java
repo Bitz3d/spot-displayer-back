@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class WeldingSpot {
 
     @Id

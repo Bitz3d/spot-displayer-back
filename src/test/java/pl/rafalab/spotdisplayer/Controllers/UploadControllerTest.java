@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.rafalab.spotdisplayer.Utils.FileCrawlerImpl;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.WeldingSpotWorker;
 import pl.rafalab.spotdisplayer.Utils.TextWorkerImpl;
 import pl.rafalab.spotdisplayer.Utils.UnzipUtil;
 import pl.rafalab.spotdisplayer.security.TokenProvider;
@@ -37,13 +38,16 @@ class UploadControllerTest {
     @Mock
     private TokenProvider tokenProvider;
 
+    @Mock
+    private WeldingSpotWorker weldingSpotWorker;
+
 
     private UploadController uploadController;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        uploadController = new UploadController(unzipUtil, fileCrawler, textWorker, tokenProvider);
+        uploadController = new UploadController(unzipUtil, fileCrawler, textWorker, tokenProvider, weldingSpotWorker);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(uploadController)
                 .build();

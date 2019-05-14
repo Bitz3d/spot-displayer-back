@@ -14,6 +14,7 @@ import pl.rafalab.spotdisplayer.Utils.Constants;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.TextWorker;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
+import pl.rafalab.spotdisplayer.Utils.Interfaces.WeldingSpotWorker;
 import pl.rafalab.spotdisplayer.security.TokenProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,12 +36,14 @@ public class UploadController {
     private FileCrawler fileCrawler;
     private TextWorker textWorker;
     private TokenProvider tokenProvider;
+    private WeldingSpotWorker weldingSpotWorker;
 
-    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, TokenProvider tokenProvider) {
+    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, TokenProvider tokenProvider, WeldingSpotWorker weldingSpotWorker) {
         this.unzipFile = unzipFile;
         this.fileCrawler = fileCrawler;
         this.textWorker = textWorker;
         this.tokenProvider = tokenProvider;
+        this.weldingSpotWorker = weldingSpotWorker;
     }
 
     @PostMapping("/upload")
@@ -78,9 +81,11 @@ public class UploadController {
 
         String token = request.getHeader(Constants.HEADER_STRING).replace(Constants.TOKEN_PREFIX, "");
 
-        tokenProvider.getUsernameFromToken(token);
+        String usernameFromToken = tokenProvider.getUsernameFromToken(token);
 
-        listOfWeldingSpotsList.forEach(x -> x.forEach(System.out::println));
+        listOfWeldingSpotsList.forEach(x -> x.forEach(robTarget -> {
+            weldingSpotWorker.extractAndSaveWeldingSpots(robTarget, usernameFromToken);
+        }));
 
         return new ResponseEntity(httpStatus.get());
     }

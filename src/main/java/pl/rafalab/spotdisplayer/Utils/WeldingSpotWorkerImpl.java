@@ -19,6 +19,7 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
 
     WeldingSpotService weldingSpotService;
     MyUserService myUserService;
+    WeldingSpot weldingSpot;
 
     public WeldingSpotWorkerImpl(WeldingSpotService weldingSpotService, MyUserService myUserService) {
         this.weldingSpotService = weldingSpotService;
@@ -27,8 +28,11 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
 
     public void extractAndSaveWeldingSpots(String robTarget, String userName) {
         MyUser myUser = myUserService.findOne(userName);
-        WeldingSpot.builder().myUser(myUser);
+        logger.info("Getting user " + myUser.getUsername() + " from Database");
+        logger.info("Start retriving data from " + robTarget);
         WeldingSpot weldingSpotObject = createWeldingSpotObject(robTarget);
+        logger.info("Build " + weldingSpotObject + " and save it to database");
+        weldingSpotObject.setMyUser(myUser);
         weldingSpotService.save(weldingSpotObject);
 
     }
@@ -40,18 +44,18 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
             throw new NullPointerException();
         }
         Pattern p = Pattern.compile(Constants.WELDING_SPOT_DATA_EXTRACTION_PATTERN);
-        Matcher matcher = p.matcher(robTarget);
+        Matcher matcher = p.matcher(robTarget.toLowerCase());
+        WeldingSpot build = null;
         while (matcher.find()) {
-            WeldingSpot.builder()
+            build = WeldingSpot.builder()
                     .spotName(matcher.group(1))
                     .modelName(matcher.group(2))
-                    .pointX(Double.parseDouble(matcher.group(4)))
-                    .pointY(Double.parseDouble(matcher.group(5)))
-                    .pointZ(Double.parseDouble(matcher.group(6)));
-
+                    .pointX(Double.parseDouble(matcher.group(5)))
+                    .pointY(Double.parseDouble(matcher.group(6)))
+                    .pointZ(Double.parseDouble(matcher.group(7))).build();
 
         }
-        return WeldingSpot.builder().build();
+        return build;
     }
 
 }

@@ -36,13 +36,11 @@ public class WeldingSpotServiceImplTest {
         weldingSpot = WeldingSpot.builder()
                 .id(1L)
                 .spotName("spot12")
-                .line("1.1")
                 .modelName("F56")
                 .myUser(new MyUser())
                 .pointX(122.2)
                 .pointY(432.2)
                 .pointZ(133.2)
-                .robName("ROB12")
                 .build();
 
         weldingSpotList =new ArrayList<>();
