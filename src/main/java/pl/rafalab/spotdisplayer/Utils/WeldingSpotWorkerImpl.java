@@ -19,7 +19,6 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
 
     WeldingSpotService weldingSpotService;
     MyUserService myUserService;
-    WeldingSpot weldingSpot;
 
     public WeldingSpotWorkerImpl(WeldingSpotService weldingSpotService, MyUserService myUserService) {
         this.weldingSpotService = weldingSpotService;
