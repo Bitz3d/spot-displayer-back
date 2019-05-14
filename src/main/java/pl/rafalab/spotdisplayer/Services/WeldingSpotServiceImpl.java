@@ -12,11 +12,9 @@ import java.util.Optional;
 public class WeldingSpotServiceImpl implements WeldingSpotService {
 
     private WeldingSpotRepository weldingSpotRepository;
-    private MyUserService myUserService;
 
     public WeldingSpotServiceImpl(WeldingSpotRepository weldingSpotRepository, MyUserService myUserService) {
         this.weldingSpotRepository = weldingSpotRepository;
-        this.myUserService = myUserService;
     }
 
     @Override
@@ -36,7 +34,7 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
 
     @Override
     public List<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName) {
-        return weldingSpotRepository.findByMyUserAndModelName(myUser,modelName);
+        return weldingSpotRepository.findByMyUserAndModelName(myUser, modelName);
     }
 
     @Override

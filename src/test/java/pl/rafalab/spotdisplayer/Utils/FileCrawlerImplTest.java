@@ -13,13 +13,13 @@ class FileCrawlerImplTest extends BaseUtil {
     void search_file_with_correct_extension() {
         List<File> list = fileCrawlerImpl.searchFileWithExtension(homeDirectory, ".mod");
 
-        Assertions.assertEquals(1,list.size());
+        Assertions.assertEquals(1, list.size());
     }
 
     @Test
     void search_file_with_incorrect_extension() {
         List<File> list = fileCrawlerImpl.searchFileWithExtension(homeDirectory, ".opw");
 
-        Assertions.assertEquals(0,list.size());
+        Assertions.assertEquals(0, list.size());
     }
 }
