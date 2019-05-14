@@ -102,7 +102,7 @@ class UploadControllerTest {
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/upload")
                         .file(mockMultipartFile);
-        this.mockMvc.perform(builder).andExpect(status().isUnprocessableEntity())
+        this.mockMvc.perform(builder).andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
 

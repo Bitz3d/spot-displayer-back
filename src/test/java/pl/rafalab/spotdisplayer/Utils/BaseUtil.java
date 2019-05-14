@@ -18,7 +18,7 @@ public abstract class BaseUtil {
     String homeDirectory;
     String fileSeparator;
     String compressFilePath;
-    String expectedFileLocation = "/home/rafau/someFolder/compressed/rafal.mod";
+    String expectedFileLocation = "/home/rafau/someFolder/compressed";
     FileCrawlerImpl fileCrawlerImpl;
 
     @BeforeEach
