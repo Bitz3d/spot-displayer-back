@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import pl.rafalab.spotdisplayer.Utils.Constants;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.TextWorker;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
+import pl.rafalab.spotdisplayer.security.TokenProvider;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,16 +34,18 @@ public class UploadController {
     private UnzipFile unzipFile;
     private FileCrawler fileCrawler;
     private TextWorker textWorker;
+    private TokenProvider tokenProvider;
 
-    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker) {
+    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, TokenProvider tokenProvider) {
         this.unzipFile = unzipFile;
         this.fileCrawler = fileCrawler;
         this.textWorker = textWorker;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity submit(@RequestParam("files") List<MultipartFile> files) {
+    public ResponseEntity submit(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) {
         AtomicReference<HttpStatus> httpStatus = new AtomicReference<>();
         httpStatus.set(HttpStatus.OK);
         List<String> listOfUnzipedFiles = new ArrayList<>();
@@ -70,6 +75,10 @@ public class UploadController {
         for (File file : listOfFoundFiles) {
             listOfWeldingSpotsList.add(textWorker.findWeldingSpots(file));
         }
+
+        String token = request.getHeader(Constants.HEADER_STRING).replace(Constants.TOKEN_PREFIX, "");
+
+        tokenProvider.getUsernameFromToken(token);
 
         listOfWeldingSpotsList.forEach(x -> x.forEach(System.out::println));
 

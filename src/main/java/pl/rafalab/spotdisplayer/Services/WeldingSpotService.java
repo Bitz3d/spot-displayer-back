@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WeldingSpotService {
-    WeldingSpot save(WeldingSpot user);
+    WeldingSpot save(WeldingSpot weldingSpot);
     List<WeldingSpot> findByMyUser(MyUser username);
     List<WeldingSpot> findBySpotName(String spotName);
     List<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName);

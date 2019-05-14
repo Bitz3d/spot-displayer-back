@@ -40,13 +40,6 @@ public class WeldingSpot {
     @Column(name = "point_z")
     private double pointZ;
 
-    @NotEmpty
-    @Column(name = "rob_name")
-    private String robName;
-
-    @NotEmpty
-    private String line;
-
     @ManyToOne()
     @JoinColumn(name = "my_user_id")
     private MyUser myUser;
