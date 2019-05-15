@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @Component
 public class FileCrawlerImpl implements FileCrawler {
 
-    public List<File> searchFileWithExtension(String folderToSearchPath, String extension) {
+    public List<File> searchFileWithExtension(String folderToSearchPath, String extension) throws IOException {
         List<File> result = null;
 
         try (Stream<Path> walk = Files.walk(Paths.get(folderToSearchPath))) {

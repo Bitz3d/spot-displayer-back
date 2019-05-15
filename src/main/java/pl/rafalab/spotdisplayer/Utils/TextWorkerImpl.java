@@ -11,20 +11,23 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
 public class TextWorkerImpl implements TextWorker {
 
+
     @Override
-    public List<String> findWeldingSpots(File modFile) {
+    public List<String> findWeldingSpots(File modFile) throws IOException {
 
         List<String> list = new ArrayList<>();
 
         try (Stream<String> stream = Files.lines(Paths.get(modFile.getAbsolutePath()))) {
             list = stream
-                    .filter(line -> line.contains(Constants.SEARCHING_LINES))
+                    .filter(line -> Pattern.compile(Constants.WELDING_SPOT_DATA_EXTRACTION_PATTERN).matcher(line.toLowerCase()).find())
+//                    .filter(line -> line.contains(Constants.SEARCHING_LINES))
                     .collect(Collectors.toList());
         } catch (UncheckedIOException d) {
             list = Collections.emptyList();

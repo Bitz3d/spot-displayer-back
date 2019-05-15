@@ -7,16 +7,15 @@ import pl.rafalab.spotdisplayer.Repository.WeldingSpotRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class WeldingSpotServiceImpl implements WeldingSpotService {
 
     private WeldingSpotRepository weldingSpotRepository;
-    private MyUserService myUserService;
 
     public WeldingSpotServiceImpl(WeldingSpotRepository weldingSpotRepository, MyUserService myUserService) {
         this.weldingSpotRepository = weldingSpotRepository;
-        this.myUserService = myUserService;
     }
 
     @Override
@@ -25,23 +24,33 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
     }
 
     @Override
-    public List<WeldingSpot> findByMyUser(MyUser username) {
+    public void saveAllWeldingSpors(List<WeldingSpot> weldingSpots) {
+        weldingSpotRepository.saveAll(weldingSpots);
+    }
+
+    @Override
+    public Set<WeldingSpot> findByMyUser(MyUser username) {
         return weldingSpotRepository.findByMyUser(username);
     }
 
     @Override
-    public List<WeldingSpot> findBySpotName(String spotName) {
+    public Set<WeldingSpot> findBySpotName(String spotName) {
         return weldingSpotRepository.findBySpotName(spotName);
     }
 
     @Override
-    public List<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName) {
-        return weldingSpotRepository.findByMyUserAndModelName(myUser,modelName);
+    public Set<WeldingSpot> findByMyUserAndModelName(MyUser myUser, String modelName) {
+        return weldingSpotRepository.findByMyUserAndModelName(myUser, modelName);
     }
 
     @Override
     public Optional<WeldingSpot> findById(Long id) {
         return weldingSpotRepository.findById(id);
+    }
+
+    @Override
+    public Set<String> getAllBySpotNameAndUserId(long user_id) {
+        return weldingSpotRepository.getAllBySpotNameAndUserId(user_id);
     }
 
 }

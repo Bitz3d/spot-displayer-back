@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class WeldingSpot {
 
     @Id
@@ -39,13 +40,6 @@ public class WeldingSpot {
     @NotNull
     @Column(name = "point_z")
     private double pointZ;
-
-    @NotEmpty
-    @Column(name = "rob_name")
-    private String robName;
-
-    @NotEmpty
-    private String line;
 
     @ManyToOne()
     @JoinColumn(name = "my_user_id")

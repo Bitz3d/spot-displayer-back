@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public abstract class BaseUtil {
-    UnzipFile unzipFile;
-    String textFileName;
-    String zippedFileName = "compressed.zip";
+abstract class BaseUtil {
+    private UnzipFile unzipFile;
+    private String textFileName;
+    private String zippedFileName = "compressed.zip";
     String homeDirectory;
-    String fileSeparator;
+    private String fileSeparator;
     String compressFilePath;
     String expectedFileLocation = "/home/rafau/someFolder/compressed";
     FileCrawlerImpl fileCrawlerImpl;

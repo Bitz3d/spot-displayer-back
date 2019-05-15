@@ -6,9 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TextWorkerImplTest {
 
@@ -21,14 +23,14 @@ class TextWorkerImplTest {
     }
 
     @Test
-    void should_return_list_of_welding_spots() {
+    void should_return_list_of_welding_spots() throws IOException {
         List<String> weldingSpots = textWorkerImpl.findWeldingSpots(new File("/home/rafau/Desktop/1.0/F15M04_10R05_BACKUP_2015-09-27/RAPID/TASK1/PROGMOD/F15M04_10R05.mod"));
         weldingSpots.forEach(System.out::println);
         assertEquals(weldingSpots.size(), 27);
     }
 
     @Test
-    void should_return_empty_list() {
+    void should_return_empty_list() throws IOException {
         List<String> weldingSpots = textWorkerImpl.findWeldingSpots(new File("/home/rafau/Desktop/1.0/F15M04_10R05_BACKUP_2015-09-27/RAPID/TASK1/PROGMOD/ComUser.mod"));
         weldingSpots.forEach(System.out::println);
         assertEquals(weldingSpots.size(), 0);
