@@ -9,8 +9,8 @@ import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
 import pl.rafalab.spotdisplayer.Repository.WeldingSpotRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -26,7 +26,7 @@ public class WeldingSpotServiceImplTest {
 
     WeldingSpot weldingSpot;
 
-    List<WeldingSpot> weldingSpotList;
+    Set<WeldingSpot> weldingSpotList;
 
     @BeforeEach
     void setUp() {
@@ -43,7 +43,7 @@ public class WeldingSpotServiceImplTest {
                 .pointZ(133.2)
                 .build();
 
-        weldingSpotList =new ArrayList<>();
+        weldingSpotList = new HashSet<>();
         weldingSpotList.add(weldingSpot);
     }
 
@@ -57,8 +57,8 @@ public class WeldingSpotServiceImplTest {
     @Test
     void test_find_by_user_with_correct_data() {
         when(weldingSpotRepository.findByMyUser(any(MyUser.class))).thenReturn((weldingSpotList));
-        List<WeldingSpot> weldingSpotByUsername = weldingSpotService.findByMyUser(new MyUser());
-        Assertions.assertEquals(weldingSpotList.size(),weldingSpotByUsername .size());
+        Set<WeldingSpot> weldingSpotByUsername = weldingSpotService.findByMyUser(new MyUser());
+        Assertions.assertEquals(weldingSpotList.size(), weldingSpotByUsername.size());
     }
 
 }

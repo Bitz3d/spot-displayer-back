@@ -1,5 +1,6 @@
 package pl.rafalab.spotdisplayer.Controllers;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import pl.rafalab.spotdisplayer.Models.MyUser;
+import pl.rafalab.spotdisplayer.Models.WeldingSpot;
+import pl.rafalab.spotdisplayer.Services.MyUserService;
+import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
 import pl.rafalab.spotdisplayer.Utils.Constants;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.TextWorker;
@@ -22,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
@@ -37,18 +43,22 @@ public class UploadController {
     private TextWorker textWorker;
     private TokenProvider tokenProvider;
     private WeldingSpotWorker weldingSpotWorker;
+    private WeldingSpotService weldingSpotService;
+    private MyUserService myUserService;
 
-    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, TokenProvider tokenProvider, WeldingSpotWorker weldingSpotWorker) {
+    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, TokenProvider tokenProvider, WeldingSpotWorker weldingSpotWorker, WeldingSpotService weldingSpotService, MyUserService myUserService) {
         this.unzipFile = unzipFile;
         this.fileCrawler = fileCrawler;
         this.textWorker = textWorker;
         this.tokenProvider = tokenProvider;
         this.weldingSpotWorker = weldingSpotWorker;
+        this.weldingSpotService = weldingSpotService;
+        this.myUserService = myUserService;
     }
 
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity submit(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) {
+    public ResponseEntity submit(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
         AtomicReference<HttpStatus> httpStatus = new AtomicReference<>();
         httpStatus.set(HttpStatus.OK);
         List<String> listOfUnzipedFiles = new ArrayList<>();
@@ -75,19 +85,39 @@ public class UploadController {
         List<File> listOfFoundFiles = fileCrawler.searchFileWithExtension(mailUploadFolder.getAbsolutePath(), ".mod");
 
         List<List<String>> listOfWeldingSpotsList = new ArrayList<>();
+
         for (File file : listOfFoundFiles) {
             listOfWeldingSpotsList.add(textWorker.findWeldingSpots(file));
         }
 
         String token = request.getHeader(Constants.HEADER_STRING).replace(Constants.TOKEN_PREFIX, "");
 
-        String usernameFromToken = tokenProvider.getUsernameFromToken(token);
+        MyUser myUser = myUserService.findOne(tokenProvider.getUsernameFromToken(token));
+
+
+        List<WeldingSpot> weldingSpotsList = new ArrayList<>();
+        Set<String> allBySpotNameAndUserId = weldingSpotService.getAllBySpotNameAndUserId(myUser.getId());
 
         listOfWeldingSpotsList.forEach(x -> x.forEach(robTarget -> {
-            weldingSpotWorker.extractAndSaveWeldingSpots(robTarget, usernameFromToken);
+            WeldingSpot weldingSpot = weldingSpotWorker.extractAndSaveWeldingSpots(robTarget, myUser);
+            if (allBySpotNameAndUserId.add(weldingSpot.getSpotName()))
+                weldingSpotsList.add(weldingSpot);
+            {
+
+            }
         }));
 
+        weldingSpotService.saveAllWeldingSpors(weldingSpotsList);
+        removeUploadFolderContent(mailUploadFolder);
         return new ResponseEntity(httpStatus.get());
+    }
+
+    private void removeUploadFolderContent(File mailUploadFolder) {
+        try {
+            FileUtils.cleanDirectory(mailUploadFolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private File makeUploadFolder() {
