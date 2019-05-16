@@ -12,13 +12,12 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import pl.rafalab.spotdisplayer.Services.MyUserService;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
 import pl.rafalab.spotdisplayer.Utils.FileCrawlerImpl;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.WeldingSpotWorker;
 import pl.rafalab.spotdisplayer.Utils.TextWorkerImpl;
 import pl.rafalab.spotdisplayer.Utils.UnzipUtil;
-import pl.rafalab.spotdisplayer.security.TokenProvider;
+import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +37,7 @@ class UploadControllerTest {
     private TextWorkerImpl textWorker;
 
     @Mock
-    private TokenProvider tokenProvider;
+    private UsefulUtils usefulUtils;
 
     @Mock
     private WeldingSpotWorker weldingSpotWorker;
@@ -46,15 +45,13 @@ class UploadControllerTest {
     @Mock
     private WeldingSpotService weldingSpotService;
 
-    @Mock
-    private MyUserService myUserService;
 
     private UploadController uploadController;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        uploadController = new UploadController(unzipUtil, fileCrawler, textWorker, tokenProvider, weldingSpotWorker, weldingSpotService, myUserService);
+        uploadController = new UploadController(unzipUtil, fileCrawler, textWorker, weldingSpotWorker, weldingSpotService, usefulUtils);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(uploadController)
                 .build();
