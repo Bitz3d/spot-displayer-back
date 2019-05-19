@@ -53,7 +53,6 @@ public class HomeController {
         boolean add = !byMyUser.contains(build.getSpotName());
 
 
-        System.out.println(add);
         return "test user";
     }
 

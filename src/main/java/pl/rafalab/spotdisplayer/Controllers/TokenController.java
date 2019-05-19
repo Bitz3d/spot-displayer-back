@@ -10,6 +10,9 @@ import pl.rafalab.spotdisplayer.Models.AuthToken;
 import pl.rafalab.spotdisplayer.Models.LoginUser;
 import pl.rafalab.spotdisplayer.security.TokenProvider;
 
+import javax.validation.Valid;
+
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/token")
 public class TokenController {
@@ -23,7 +26,7 @@ public class TokenController {
     }
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> register(@RequestBody LoginUser loginUser){
+    public ResponseEntity<?> register(@RequestBody @Valid LoginUser loginUser){
 
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

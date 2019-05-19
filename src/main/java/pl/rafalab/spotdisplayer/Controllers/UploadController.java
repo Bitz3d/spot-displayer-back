@@ -92,7 +92,7 @@ public class UploadController {
         Set<String> allBySpotNameAndUserId = weldingSpotService.getAllBySpotNameAndUserId(myUser.getId());
 
         listOfWeldingSpotsList.forEach(x -> x.forEach(robTarget -> {
-            WeldingSpot weldingSpot = weldingSpotWorker.extractAndSaveWeldingSpots(robTarget, myUser);
+            WeldingSpot weldingSpot = weldingSpotWorker.extractWeldingSpotsForUser(robTarget, myUser);
             if (allBySpotNameAndUserId.add(weldingSpot.getSpotName()))
                 weldingSpotsList.add(weldingSpot);
         }));

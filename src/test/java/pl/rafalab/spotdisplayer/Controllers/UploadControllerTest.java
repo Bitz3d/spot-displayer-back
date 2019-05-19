@@ -12,16 +12,22 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import pl.rafalab.spotdisplayer.Models.MyRole;
+import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
+import pl.rafalab.spotdisplayer.TesetUtils.TestUtils;
 import pl.rafalab.spotdisplayer.Utils.FileCrawlerImpl;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.WeldingSpotWorker;
 import pl.rafalab.spotdisplayer.Utils.TextWorkerImpl;
 import pl.rafalab.spotdisplayer.Utils.UnzipUtil;
 import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.HashSet;
+import java.util.Set;
 
-;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class UploadControllerTest {
 
@@ -45,8 +51,9 @@ class UploadControllerTest {
     @Mock
     private WeldingSpotService weldingSpotService;
 
-
     private UploadController uploadController;
+
+    private MyUser myUser;
 
     @BeforeEach
     void setUp() {
@@ -55,13 +62,21 @@ class UploadControllerTest {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(uploadController)
                 .build();
+
         ReflectionTestUtils.setField(uploadController, "uploadFolder", "someFolder");
+
+        myUser = new MyUser();
+        myUser.setId(1L);
+        myUser.setPassword("password");
+        myUser.setRoles(TestUtils.getUserRoles());
+        myUser.setUsername("user");
 
     }
 
     @Test
     void correct_list_of_files_should_return_httpOk_status_with_zipFile() throws Exception {
         MockMultipartFile mockMultipartFile = checkIfFilenameIsCorrect("files", "content.zip");
+        when(usefulUtils.getUserFromRequest(any())).thenReturn(myUser);
 
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/upload")
@@ -74,8 +89,8 @@ class UploadControllerTest {
 
     @Test
     void correct_list_of_files_should_return_httpOk_status_with_rarFile() throws Exception {
-        MockMultipartFile mockMultipartFile = checkIfFilenameIsCorrect("files", "content.zip");
-
+        MockMultipartFile mockMultipartFile = checkIfFilenameIsCorrect("files", "content.rar");
+        when(usefulUtils.getUserFromRequest(any())).thenReturn(myUser);
 
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/upload")
@@ -87,7 +102,7 @@ class UploadControllerTest {
     @Test
     void correct_list_of_files_should_return_httpOk_status_with_incorrect_format() throws Exception {
         MockMultipartFile mockMultipartFile = checkIfFilenameIsCorrect("files", "content.txt");
-
+        when(usefulUtils.getUserFromRequest(any())).thenReturn(myUser);
 
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/upload")
@@ -100,6 +115,7 @@ class UploadControllerTest {
     @Test
     void correct_list_of_files_should_return_httpOk_status_with_null() throws Exception {
         MockMultipartFile mockMultipartFile = checkIfFilenameIsCorrect("files", null);
+        when(usefulUtils.getUserFromRequest(any())).thenReturn(myUser);
 
         MockHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/upload")
@@ -110,7 +126,7 @@ class UploadControllerTest {
 
 
     @Test
-    void correct_list_of_files_should_return_httpOk_status_with_incorrect_files_key_value() throws Exception {
+    void correct_list_of_files_should_return_BadRequest_status_with_incorrect_files_key_value() throws Exception {
         MockMultipartFile mockMultipartFile = checkIfFilenameIsCorrect("incorreect", "somename");
 
         MockHttpServletRequestBuilder builder =
@@ -125,6 +141,5 @@ class UploadControllerTest {
                 keyVlues, fileName, MediaType.APPLICATION_OCTET_STREAM_VALUE, "test data".getBytes());
 
     }
-
 
 }
