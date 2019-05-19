@@ -15,21 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UnzipUtilTest extends BaseUtil {
 
 
+    @Test
+    void check_if_it_is_possible_to_unzip_file() throws IOException {
+        compressFilePath = homeDirectory + fileSeparator + zippedFileName;
+        File file = new File(compressFilePath);
+        FileInputStream input = new FileInputStream(compressFilePath);
+        MultipartFile multipartFile = new MockMultipartFile("file",
+                file.getName(), "text/plain", input);
 
+        String unZipFile = unzipFile.unZipFile(multipartFile, homeDirectory);
 
-    //TODO poprawić ten test
-//    @Test
-//    void check_if_it_is_possible_to_unzip_file() throws IOException {
-//        compressFilePath = homeDirectory + fileSeparator + zippedFileName;
-//        File file = new File(compressFilePath);
-//        FileInputStream input = new FileInputStream(compressFilePath);
-//        MultipartFile multipartFile = new MockMultipartFile("file",
-//                file.getName(), "text/plain", input);
-//
-//        String unZipFile = unzipFile.unZipFile(multipartFile, homeDirectory);
-//
-//        assertEquals(expectedFileLocation, unZipFile);
-//    }
+        assertEquals(expectedFileLocation, unZipFile);
+    }
 
     @AfterEach
     void cleanUp() throws IOException {

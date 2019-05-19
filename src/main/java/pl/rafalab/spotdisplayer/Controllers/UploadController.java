@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
-import pl.rafalab.spotdisplayer.Services.MyUserService;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
-import pl.rafalab.spotdisplayer.Utils.Constants;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.TextWorker;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.WeldingSpotWorker;
-import pl.rafalab.spotdisplayer.security.TokenProvider;
+import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -41,19 +39,17 @@ public class UploadController {
     private UnzipFile unzipFile;
     private FileCrawler fileCrawler;
     private TextWorker textWorker;
-    private TokenProvider tokenProvider;
     private WeldingSpotWorker weldingSpotWorker;
     private WeldingSpotService weldingSpotService;
-    private MyUserService myUserService;
+    private UsefulUtils usefulUtils;
 
-    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, TokenProvider tokenProvider, WeldingSpotWorker weldingSpotWorker, WeldingSpotService weldingSpotService, MyUserService myUserService) {
+    public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, WeldingSpotWorker weldingSpotWorker, WeldingSpotService weldingSpotService, UsefulUtils usefulUtils) {
         this.unzipFile = unzipFile;
         this.fileCrawler = fileCrawler;
         this.textWorker = textWorker;
-        this.tokenProvider = tokenProvider;
         this.weldingSpotWorker = weldingSpotWorker;
         this.weldingSpotService = weldingSpotService;
-        this.myUserService = myUserService;
+        this.usefulUtils = usefulUtils;
     }
 
     @PostMapping("/upload")
@@ -90,21 +86,15 @@ public class UploadController {
             listOfWeldingSpotsList.add(textWorker.findWeldingSpots(file));
         }
 
-        String token = request.getHeader(Constants.HEADER_STRING).replace(Constants.TOKEN_PREFIX, "");
-
-        MyUser myUser = myUserService.findOne(tokenProvider.getUsernameFromToken(token));
-
+        MyUser myUser = usefulUtils.getUserFromRequest(request);
 
         List<WeldingSpot> weldingSpotsList = new ArrayList<>();
         Set<String> allBySpotNameAndUserId = weldingSpotService.getAllBySpotNameAndUserId(myUser.getId());
 
         listOfWeldingSpotsList.forEach(x -> x.forEach(robTarget -> {
-            WeldingSpot weldingSpot = weldingSpotWorker.extractAndSaveWeldingSpots(robTarget, myUser);
+            WeldingSpot weldingSpot = weldingSpotWorker.extractWeldingSpotsForUser(robTarget, myUser);
             if (allBySpotNameAndUserId.add(weldingSpot.getSpotName()))
                 weldingSpotsList.add(weldingSpot);
-            {
-
-            }
         }));
 
         weldingSpotService.saveAllWeldingSpors(weldingSpotsList);

@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
 import pl.rafalab.spotdisplayer.Models.MyRole;
 import pl.rafalab.spotdisplayer.Services.MyUserService;
+import pl.rafalab.spotdisplayer.TesetUtils.TestUtils;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -40,13 +41,6 @@ public class UserControllerTest {
 
     }
 
-    private Set<MyRole> getUserRoles() {
-        Set<MyRole> myRoles = new HashSet<>();
-        myRoles.add(new MyRole(1, "ROLE_ADMIN"));
-        myRoles.add(new MyRole(2, "ROLE_USER"));
-        return myRoles;
-    }
-
     @Test
     public void test_save_user_with_correct_data() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -54,7 +48,7 @@ public class UserControllerTest {
         MyUserDto myUserDto = new MyUserDto();
         myUserDto.setPassword("password");
         myUserDto.setUsername("Pawel");
-        myUserDto.setRoles(getUserRoles());
+        myUserDto.setRoles(TestUtils.getUserRoles());
         jsonNode = objectMapper.writeValueAsString(myUserDto);
 
 
@@ -73,7 +67,7 @@ public class UserControllerTest {
         MyUserDto myUserDto = new MyUserDto();
         myUserDto.setPassword("password");
         myUserDto.setUsername("");
-        myUserDto.setRoles(getUserRoles());
+        myUserDto.setRoles(TestUtils.getUserRoles());
         jsonNode = objectMapper.writeValueAsString(myUserDto);
 
 
@@ -90,7 +84,7 @@ public class UserControllerTest {
         MyUserDto myUserDto = new MyUserDto();
         myUserDto.setPassword("");
         myUserDto.setUsername(null);
-        myUserDto.setRoles(getUserRoles());
+        myUserDto.setRoles(TestUtils.getUserRoles());
         jsonNode = objectMapper.writeValueAsString(myUserDto);
 
 
@@ -99,6 +93,5 @@ public class UserControllerTest {
                 .content(jsonNode))
                 .andExpect(status().is(400)).andReturn();
     }
-
 
 }

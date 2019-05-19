@@ -16,7 +16,7 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
     private Logger logger = LoggerFactory.getLogger(WeldingSpotWorkerImpl.class);
 
 
-    public WeldingSpot extractAndSaveWeldingSpots(String robTarget, MyUser myUser) {
+    public WeldingSpot extractWeldingSpotsForUser(String robTarget, MyUser myUser) {
         logger.info("Getting user " + myUser.getUsername() + " from Database");
         logger.info("Start retriving data from " + robTarget);
         WeldingSpot weldingSpotObject = createWeldingSpotObject(robTarget);
@@ -32,9 +32,9 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
         }
         Pattern p = Pattern.compile(Constants.WELDING_SPOT_DATA_EXTRACTION_PATTERN);
         Matcher matcher = p.matcher(robTarget.toLowerCase());
-        WeldingSpot build = null;
+        WeldingSpot weldingSpot = null;
         while (matcher.find()) {
-            build = WeldingSpot.builder()
+            weldingSpot = WeldingSpot.builder()
                     .spotName(matcher.group(1))
                     .modelName(matcher.group(2))
                     .pointX(Double.parseDouble(matcher.group(5)))
@@ -42,7 +42,7 @@ public class WeldingSpotWorkerImpl implements WeldingSpotWorker {
                     .pointZ(Double.parseDouble(matcher.group(9))).build();
 
         }
-        return build;
+        return weldingSpot;
     }
 
 }
