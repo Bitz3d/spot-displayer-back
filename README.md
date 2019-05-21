@@ -12,7 +12,7 @@ project in progress
 
 in order to generate tables in databse change application.properties -> spring.jpa.hibernate.ddl-auto=create-drop
 
-and in table `role` make 2 insterts
+and in table `role` 2 insterts
 
 insert into role (id,role) values (1,"ADMIN");
 insert into role (id,role) values (2,"USER");
