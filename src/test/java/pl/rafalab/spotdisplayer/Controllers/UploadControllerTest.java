@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import pl.rafalab.spotdisplayer.Models.MyRole;
 import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
 import pl.rafalab.spotdisplayer.TesetUtils.TestUtils;
@@ -21,9 +20,6 @@ import pl.rafalab.spotdisplayer.Utils.Interfaces.WeldingSpotWorker;
 import pl.rafalab.spotdisplayer.Utils.TextWorkerImpl;
 import pl.rafalab.spotdisplayer.Utils.UnzipUtil;
 import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

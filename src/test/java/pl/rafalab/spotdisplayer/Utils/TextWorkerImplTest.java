@@ -24,14 +24,16 @@ class TextWorkerImplTest {
 
     @Test
     void should_return_list_of_welding_spots() throws IOException {
-        List<String> weldingSpots = textWorkerImpl.findWeldingSpots(new File("/home/rafau/Desktop/1.0/F15M04_10R05_BACKUP_2015-09-27/RAPID/TASK1/PROGMOD/F15M04_10R05.mod"));
+        String correctFile = "/home/rafau/Desktop/1.0/F15M04_10R05_BACKUP_2015-09-27/RAPID/TASK1/PROGMOD/F15M04_10R05.mod";
+        List<String> weldingSpots = textWorkerImpl.findWeldingSpots(new File(correctFile));
         weldingSpots.forEach(System.out::println);
         assertEquals(weldingSpots.size(), 27);
     }
 
     @Test
     void should_return_empty_list() throws IOException {
-        List<String> weldingSpots = textWorkerImpl.findWeldingSpots(new File("/home/rafau/Desktop/1.0/F15M04_10R05_BACKUP_2015-09-27/RAPID/TASK1/PROGMOD/ComUser.mod"));
+        String incorrectFile = "/home/rafau/Desktop/1.0/F15M04_10R05_BACKUP_2015-09-27/RAPID/TASK1/PROGMOD/ComUser.mod";
+        List<String> weldingSpots = textWorkerImpl.findWeldingSpots(new File(incorrectFile));
         weldingSpots.forEach(System.out::println);
         assertEquals(weldingSpots.size(), 0);
     }

@@ -54,7 +54,7 @@ public class UploadController {
 
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity submit(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
+    public ResponseEntity uploadFiels(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
         AtomicReference<HttpStatus> httpStatus = new AtomicReference<>();
         httpStatus.set(HttpStatus.OK);
         List<String> listOfUnzipedFiles = new ArrayList<>();
@@ -80,6 +80,15 @@ public class UploadController {
 
         List<File> listOfFoundFiles = fileCrawler.searchFileWithExtension(mailUploadFolder.getAbsolutePath(), ".mod");
 
+        List<WeldingSpot> weldingSpotsList = getWeldingSpotList(request, listOfFoundFiles);
+
+        weldingSpotService.saveAllWeldingSpors(weldingSpotsList);
+        removeUploadFolderContent(mailUploadFolder);
+
+        return new ResponseEntity("List of welding spots correctly added to your account", httpStatus.get());
+    }
+
+    private List<WeldingSpot> getWeldingSpotList(HttpServletRequest request, List<File> listOfFoundFiles) throws IOException {
         List<List<String>> listOfWeldingSpotsList = new ArrayList<>();
 
         for (File file : listOfFoundFiles) {
@@ -96,10 +105,7 @@ public class UploadController {
             if (allBySpotNameAndUserId.add(weldingSpot.getSpotName()))
                 weldingSpotsList.add(weldingSpot);
         }));
-
-        weldingSpotService.saveAllWeldingSpors(weldingSpotsList);
-        removeUploadFolderContent(mailUploadFolder);
-        return new ResponseEntity(httpStatus.get());
+        return weldingSpotsList;
     }
 
     private void removeUploadFolderContent(File mailUploadFolder) {
