@@ -4,9 +4,9 @@ project in progress
 
 1. to lunch u have to add file in path -> /src/main/resources/config.propperties with 
 
-- database.login="<database-login>"
-- database.password="<database-password>"
-- target.upload.folder="<folder-name>"
+- database.login="database-login"
+- database.password="database-password"
+- target.upload.folder="folder-name"
 
 2. Install PostgreSql
 
