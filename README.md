@@ -23,7 +23,7 @@ II. java -jar spot-displayer-0.0.1-SNAPSHOT.jar
 
 # You can chceck running app
 
-if app isn't not running please conntact me at: raf.cieslinski@gmail.com
+if app isn't running please conntact me at: raf.cieslinski@gmail.com
 
 1. You have to register as user
 
