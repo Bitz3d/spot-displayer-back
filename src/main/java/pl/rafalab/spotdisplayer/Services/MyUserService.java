@@ -1,7 +1,7 @@
 package pl.rafalab.spotdisplayer.Services;
 
 import org.springframework.stereotype.Service;
-import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.Dtos.MyUserDto;
 import pl.rafalab.spotdisplayer.Models.MyUser;
 
 import java.util.List;

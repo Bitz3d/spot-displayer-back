@@ -9,15 +9,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
-import pl.rafalab.spotdisplayer.Models.MyRole;
+import pl.rafalab.spotdisplayer.Models.Dtos.MyUserDto;
 import pl.rafalab.spotdisplayer.Services.MyUserService;
 import pl.rafalab.spotdisplayer.TesetUtils.TestUtils;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

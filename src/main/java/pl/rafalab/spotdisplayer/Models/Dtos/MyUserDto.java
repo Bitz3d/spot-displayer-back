@@ -1,4 +1,4 @@
-package pl.rafalab.spotdisplayer.Models.Dto;
+package pl.rafalab.spotdisplayer.Models.Dtos;
 
 import lombok.Data;
 import pl.rafalab.spotdisplayer.Models.MyRole;
