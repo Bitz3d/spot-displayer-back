@@ -43,8 +43,8 @@ ec2-52-30-135-35.eu-west-1.compute.amazonaws.com:8080/token/generate-token -> PO
 Body
 JSON format
 {
-	"username":"<userName>",
-	"password":"<password>"
+	"username":"userName",
+	"password":"password"
 }
  
 3. With generated token u have access to user's end-points
@@ -52,7 +52,7 @@ JSON format
 ec2-52-30-135-35.eu-west-1.compute.amazonaws.com:8080/api/user -> GET
 
 Header
-Authorization Bearer <generated-token>
+Authorization Bearer generated-token
 
 this end point just return String "test user" made to test Role in application
 
@@ -61,7 +61,7 @@ this end point just return String "test user" made to test Role in application
 I. ec2-52-30-135-35.eu-west-1.compute.amazonaws.com:8080/upload -> POST
 
 Header
-Authorization Bearer <generated-token>
+Authorization Bearer generated-token
 	
 Body
 files type file -> u can get fakeRoboteBackUp from ./robotFakeBackup.zip
@@ -72,7 +72,7 @@ It should return status 200 and add welding spots to your account
 II. ec2-52-30-135-35.eu-west-1.compute.amazonaws.com:8080/welding-spots -> GET
 
 Header
-Authorization Bearer <generated-token>
+Authorization Bearer generated-token
 
 shuold return all welding spots binded with your account
 
@@ -80,6 +80,6 @@ shuold return all welding spots binded with your account
 III. ec2-52-30-135-35.eu-west-1.compute.amazonaws.com:8080/welding-spots/{model} -> GET
 
 Header
-Authorization Bearer <generated-token>
+Authorization Bearer generated-token
 
 should return all welding spot of specyfic type
