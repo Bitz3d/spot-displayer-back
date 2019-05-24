@@ -2,10 +2,13 @@ package pl.rafalab.spotdisplayer.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import pl.rafalab.spotdisplayer.Services.MyUserService;
-import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import pl.rafalab.spotdisplayer.Models.Dtos.MyUserDto;
 import pl.rafalab.spotdisplayer.Models.MyUser;
+import pl.rafalab.spotdisplayer.Services.MyUserService;
 
 import javax.validation.Valid;
 

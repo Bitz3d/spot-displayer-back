@@ -7,14 +7,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
-import pl.rafalab.spotdisplayer.Repository.RoleRepository;
-import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.Dtos.MyUserDto;
 import pl.rafalab.spotdisplayer.Models.MyRole;
 import pl.rafalab.spotdisplayer.Models.MyUser;
+import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
+import pl.rafalab.spotdisplayer.Repository.RoleRepository;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional

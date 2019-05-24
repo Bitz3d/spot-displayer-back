@@ -8,11 +8,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
-import pl.rafalab.spotdisplayer.Repository.RoleRepository;
-import pl.rafalab.spotdisplayer.Models.Dto.MyUserDto;
+import pl.rafalab.spotdisplayer.Models.Dtos.MyUserDto;
 import pl.rafalab.spotdisplayer.Models.MyRole;
 import pl.rafalab.spotdisplayer.Models.MyUser;
+import pl.rafalab.spotdisplayer.Repository.MyUserRepository;
+import pl.rafalab.spotdisplayer.Repository.RoleRepository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
