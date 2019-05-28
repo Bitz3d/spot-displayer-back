@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.rafalab.spotdisplayer.Commons.Mapper;
 import pl.rafalab.spotdisplayer.Models.Dtos.WeldingSpotsDto;
+import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
 import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
@@ -56,10 +57,17 @@ public class WeldingSpotController {
 
     @DeleteMapping("/welding-spots/{id}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<?> deleteWeldingSpot(HttpServletRequest request, @PathVariable(value = "id") String id) {
-
+    public ResponseEntity<?> deleteWeldingSpot(@PathVariable(value = "id") String id) {
+        weldingSpotService.deleteWeldingSpotById(Long.parseLong(id));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/welding-spots")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> deleteAllUsersWeldingSpots(HttpServletRequest request) {
+        MyUser user = usefulUtils.getUserFromRequest(request);
+        weldingSpotService.deleteAllUserWeldingSpots(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

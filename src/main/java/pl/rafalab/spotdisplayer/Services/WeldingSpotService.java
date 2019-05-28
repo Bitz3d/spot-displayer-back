@@ -22,4 +22,7 @@ public interface WeldingSpotService {
 
     Set<String> getAllBySpotNameAndUserId(long user_id);
 
+    void deleteWeldingSpotById(Long id);
+
+    void deleteAllUserWeldingSpots(MyUser myUser);
 }

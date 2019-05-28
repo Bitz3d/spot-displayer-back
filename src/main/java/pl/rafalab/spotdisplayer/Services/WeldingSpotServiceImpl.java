@@ -53,4 +53,14 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
         return weldingSpotRepository.getAllBySpotNameAndUserId(user_id);
     }
 
+    @Override
+    public void deleteWeldingSpotById(Long id) {
+        weldingSpotRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllUserWeldingSpots(MyUser myUser) {
+        weldingSpotRepository.deleteAllByMyUser(myUser.getId());
+    }
+
 }
