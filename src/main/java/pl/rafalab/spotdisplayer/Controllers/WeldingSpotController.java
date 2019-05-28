@@ -3,6 +3,7 @@ package pl.rafalab.spotdisplayer.Controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,6 +52,13 @@ public class WeldingSpotController {
         byMyUser.forEach(x -> weldingSpotsDtosSet.add(weldingSpotsDtoMapper.map(x)));
 
         return new ResponseEntity<>(weldingSpotsDtosSet, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/welding-spots/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> deleteWeldingSpot(HttpServletRequest request, @PathVariable(value = "id") String id) {
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

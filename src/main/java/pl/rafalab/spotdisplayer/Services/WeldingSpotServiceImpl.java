@@ -24,7 +24,7 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
     }
 
     @Override
-    public void saveAllWeldingSpors(List<WeldingSpot> weldingSpots) {
+    public void saveAllWeldingSpots(List<WeldingSpot> weldingSpots) {
         weldingSpotRepository.saveAll(weldingSpots);
     }
 

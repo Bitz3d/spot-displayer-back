@@ -82,7 +82,7 @@ public class UploadController {
 
         List<WeldingSpot> weldingSpotsList = getWeldingSpotList(request, listOfFoundFiles);
 
-        weldingSpotService.saveAllWeldingSpors(weldingSpotsList);
+        weldingSpotService.saveAllWeldingSpots(weldingSpotsList);
         removeUploadFolderContent(mailUploadFolder);
 
         return new ResponseEntity("List of welding spots correctly added to your account", httpStatus.get());
