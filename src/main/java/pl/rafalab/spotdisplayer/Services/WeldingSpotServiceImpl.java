@@ -24,7 +24,7 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
     }
 
     @Override
-    public void saveAllWeldingSpors(List<WeldingSpot> weldingSpots) {
+    public void saveAllWeldingSpots(List<WeldingSpot> weldingSpots) {
         weldingSpotRepository.saveAll(weldingSpots);
     }
 
@@ -51,6 +51,16 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
     @Override
     public Set<String> getAllBySpotNameAndUserId(long user_id) {
         return weldingSpotRepository.getAllBySpotNameAndUserId(user_id);
+    }
+
+    @Override
+    public void deleteWeldingSpotById(Long id) {
+        weldingSpotRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllUserWeldingSpots(MyUser myUser) {
+        weldingSpotRepository.deleteAllByMyUser(myUser.getId());
     }
 
 }

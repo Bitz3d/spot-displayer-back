@@ -3,11 +3,13 @@ package pl.rafalab.spotdisplayer.Controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pl.rafalab.spotdisplayer.Commons.Mapper;
 import pl.rafalab.spotdisplayer.Models.Dtos.WeldingSpotsDto;
+import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
 import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
@@ -53,5 +55,19 @@ public class WeldingSpotController {
         return new ResponseEntity<>(weldingSpotsDtosSet, HttpStatus.OK);
     }
 
+    @DeleteMapping("/welding-spots/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> deleteWeldingSpot(@PathVariable(value = "id") String id) {
+        weldingSpotService.deleteWeldingSpotById(Long.parseLong(id));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/welding-spots")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<?> deleteAllUsersWeldingSpots(HttpServletRequest request) {
+        MyUser user = usefulUtils.getUserFromRequest(request);
+        weldingSpotService.deleteAllUserWeldingSpots(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
