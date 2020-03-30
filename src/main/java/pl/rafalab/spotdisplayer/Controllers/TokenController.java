@@ -1,5 +1,6 @@
 package pl.rafalab.spotdisplayer.Controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +12,7 @@ import pl.rafalab.spotdisplayer.Models.LoginUser;
 import pl.rafalab.spotdisplayer.security.TokenProvider;
 
 import javax.validation.Valid;
+import java.util.concurrent.atomic.AtomicReference;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -26,17 +28,27 @@ public class TokenController {
     }
 
     @PostMapping("/generate-token")
-    public ResponseEntity<?> register(@RequestBody @Valid LoginUser loginUser){
-
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUser.getUsername(),
-                        loginUser.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final String token = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+    public ResponseEntity<?> register(@RequestBody @Valid LoginUser loginUser) {
+        AtomicReference<HttpStatus> httpStatus = new AtomicReference<>();
+        String token = "";
+        try {
+            final Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginUser.getUsername(),
+                            loginUser.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            token = tokenProvider.generateToken(authentication);
+            httpStatus.set(HttpStatus.OK);
+        } catch (Exception e) {
+            httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        if (token.isEmpty()) {
+            return new ResponseEntity<>("Bad login or password", httpStatus.get());
+        } else {
+            return new ResponseEntity<>(new AuthToken(token), httpStatus.get());
+        }
     }
 }
 

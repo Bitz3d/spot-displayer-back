@@ -27,10 +27,10 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
     private PasswordEncoder encoder;
     private RoleRepository roleRepository;
 
-    public MyUserServiceImpl(MyUserRepository myUserRepository, PasswordEncoder encoder,RoleRepository roleRepository) {
+    public MyUserServiceImpl(MyUserRepository myUserRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
         this.myUserRepository = myUserRepository;
         this.encoder = encoder;
-        this.roleRepository=roleRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -52,12 +52,13 @@ public class MyUserServiceImpl implements UserDetailsService, MyUserService {
     }
 
     @Override
-    public MyUser save(MyUserDto user) {
-        MyUser newUser = new MyUser();
+    public MyUser save(final MyUserDto user) {
+        final MyUser newUser = new MyUser();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(encoder.encode(user.getPassword()));
-        newUser.setRoles(getUserRoles());
-        System.out.println(newUser.toString());
+        Set<MyRole> myRoles = new HashSet<>();
+        myRoles.add(roleRepository.findByRole("USER"));
+        newUser.setRoles(myRoles);
         return myUserRepository.save(newUser);
     }
 

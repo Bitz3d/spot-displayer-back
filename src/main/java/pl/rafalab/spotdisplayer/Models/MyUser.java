@@ -31,16 +31,6 @@ public class MyUser {
             @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     private Set<MyRole> roles;
-
-
-//    @OneToMany(
-//            mappedBy = "form",
-//            cascade = CascadeType.ALL,
-//            fetch = FetchType.EAGER
-//    )
-//    @Column(name = "welding_spots")
-//    private Set<WeldingSot> weldingSots;
-
 }
 
 

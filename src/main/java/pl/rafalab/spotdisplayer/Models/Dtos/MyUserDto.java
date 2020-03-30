@@ -15,7 +15,7 @@ public class MyUserDto {
     @Column(unique = true)
     private String username;
     @NotEmpty
-    @Size(min = 5)
+    @Size(min = 6)
     private String password;
 
     private Set<MyRole> roles;
