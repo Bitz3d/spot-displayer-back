@@ -50,6 +50,11 @@ public class TokenController {
             return new ResponseEntity<>(new AuthToken(token), httpStatus.get());
         }
     }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity<?> logout() {
+        return new ResponseEntity("Logout", HttpStatus.OK);
+    }
 }
 
 
