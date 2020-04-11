@@ -19,8 +19,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequestMapping("/token")
 public class TokenController {
 
-    private TokenProvider tokenProvider;
-    private AuthenticationManager authenticationManager;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
 
     public TokenController(TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
         this.tokenProvider = tokenProvider;

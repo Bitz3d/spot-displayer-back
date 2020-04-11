@@ -21,15 +21,13 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-
-    private UserDetailsService userDetailsService;
-    private TokenProvider tokenProvider;
+    private final UserDetailsService userDetailsService;
+    private final TokenProvider tokenProvider;
 
     public JwtAuthenticationTokenFilter(MyUserService myUserService, TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
         this.userDetailsService = (UserDetailsService) myUserService;
     }
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +24,10 @@ import pl.rafalab.spotdisplayer.Utils.UsefulUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class UploadController {
 
@@ -36,12 +36,12 @@ public class UploadController {
     @Value("${target.upload.folder}")
     private String uploadFolder;
 
-    private UnzipFile unzipFile;
-    private FileCrawler fileCrawler;
-    private TextWorker textWorker;
-    private WeldingSpotWorker weldingSpotWorker;
-    private WeldingSpotService weldingSpotService;
-    private UsefulUtils usefulUtils;
+    private final UnzipFile unzipFile;
+    private final FileCrawler fileCrawler;
+    private final TextWorker textWorker;
+    private final WeldingSpotWorker weldingSpotWorker;
+    private final WeldingSpotService weldingSpotService;
+    private final UsefulUtils usefulUtils;
 
     public UploadController(UnzipFile unzipFile, FileCrawler fileCrawler, TextWorker textWorker, WeldingSpotWorker weldingSpotWorker, WeldingSpotService weldingSpotService, UsefulUtils usefulUtils) {
         this.unzipFile = unzipFile;
@@ -54,38 +54,47 @@ public class UploadController {
 
     @PostMapping("/upload")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity uploadFiels(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
+    public ResponseEntity<String> uploadFiles(@RequestParam("files") List<MultipartFile> files, HttpServletRequest request) throws IOException {
         AtomicReference<HttpStatus> httpStatus = new AtomicReference<>();
+        AtomicReference<String> responseMessageCode = new AtomicReference<>("");
         httpStatus.set(HttpStatus.OK);
         List<String> listOfUnzipedFiles = new ArrayList<>();
 
-        if (files.size() <= 0 || files == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        if (files == null || files.size() <= 0) {
+            return new ResponseEntity<>("noFile", HttpStatus.BAD_REQUEST);
         }
 
-        File mailUploadFolder = makeUploadFolder();
+        File makeUploadFolder = makeUploadFolder();
 
         files.forEach(file -> {
             if ((!file.getOriginalFilename().contains(".zip")) && (!file.getOriginalFilename().contains(".rar"))) {
                 httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
+                responseMessageCode.set("wrongFileFormat");
             } else {
                 try {
-                    listOfUnzipedFiles.add(unzipFile.unZipFile(file, mailUploadFolder.getAbsolutePath()));
+                    listOfUnzipedFiles.add(unzipFile.unZipFile(file, makeUploadFolder.getAbsolutePath()));
                 } catch (IOException e) {
                     httpStatus.set(HttpStatus.UNPROCESSABLE_ENTITY);
+                    responseMessageCode.set("unknownError");
                     e.printStackTrace();
                 }
             }
         });
 
-        List<File> listOfFoundFiles = fileCrawler.searchFileWithExtension(mailUploadFolder.getAbsolutePath(), ".mod");
+        List<File> listOfFoundFiles = fileCrawler.searchFileWithExtension(makeUploadFolder.getAbsolutePath(), ".mod");
 
-        List<WeldingSpot> weldingSpotsList = getWeldingSpotList(request, listOfFoundFiles);
+        if (listOfFoundFiles.size() > 0) {
+            List<WeldingSpot> weldingSpotsList = getWeldingSpotList(request, listOfFoundFiles);
 
-        weldingSpotService.saveAllWeldingSpots(weldingSpotsList);
-        removeUploadFolderContent(mailUploadFolder);
+            weldingSpotService.saveAllWeldingSpots(weldingSpotsList);
+            removeUploadFolderContent(makeUploadFolder);
 
-        return new ResponseEntity("List of welding spots correctly added to your account", httpStatus.get());
+            if (httpStatus.get() == HttpStatus.OK) {
+                responseMessageCode.set("weldingUploadOk");
+            }
+        }
+
+        return new ResponseEntity<>(responseMessageCode.get(), httpStatus.get());
     }
 
     private List<WeldingSpot> getWeldingSpotList(HttpServletRequest request, List<File> listOfFoundFiles) throws IOException {
@@ -117,7 +126,7 @@ public class UploadController {
     }
 
     private File makeUploadFolder() {
-        File uploadPlace = new File(System.getProperty("user.home"), uploadFolder);
+        File uploadPlace = new File(System.getProperty("java.io.tmpdir"), uploadFolder);
         if (!uploadPlace.exists()) {
             if (uploadPlace.mkdir()) {
                 logger.info("Folder " + uploadFolder + " has been created");

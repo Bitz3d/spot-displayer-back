@@ -21,9 +21,9 @@ import java.util.Set;
 @RestController
 public class WeldingSpotController {
 
-    private WeldingSpotService weldingSpotService;
-    private UsefulUtils usefulUtils;
-    private Mapper<WeldingSpot, WeldingSpotsDto> weldingSpotsDtoMapper;
+    private final WeldingSpotService weldingSpotService;
+    private final UsefulUtils usefulUtils;
+    private final Mapper<WeldingSpot, WeldingSpotsDto> weldingSpotsDtoMapper;
 
     public WeldingSpotController(WeldingSpotService weldingSpotService, UsefulUtils usefulUtils, Mapper<WeldingSpot, WeldingSpotsDto> weldingSpotsDtoMapper) {
         this.weldingSpotService = weldingSpotService;
