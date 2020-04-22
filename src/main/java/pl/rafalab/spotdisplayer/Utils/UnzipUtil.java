@@ -40,7 +40,7 @@ public class UnzipUtil implements UnzipFile {
 
 
 //        Trick to move file to server then unzip it.
-        File rarFilePath = new File(System.getProperty("user.temp"), files.getOriginalFilename());
+        File rarFilePath = new File(System.getProperty(Constants.TEMP_DIR), files.getOriginalFilename());
         files.transferTo(rarFilePath);
 
 

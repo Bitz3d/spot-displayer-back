@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
 import pl.rafalab.spotdisplayer.Services.WeldingSpotService;
+import pl.rafalab.spotdisplayer.Utils.Constants;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.FileCrawler;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.TextWorker;
 import pl.rafalab.spotdisplayer.Utils.Interfaces.UnzipFile;
@@ -86,12 +87,18 @@ public class UploadController {
         if (listOfFoundFiles.size() > 0) {
             List<WeldingSpot> weldingSpotsList = getWeldingSpotList(request, listOfFoundFiles);
 
+            if(weldingSpotsList.isEmpty()){
+                responseMessageCode.set("noWeldingSpotsFound");
+            }
+
             weldingSpotService.saveAllWeldingSpots(weldingSpotsList);
             removeUploadFolderContent(makeUploadFolder);
 
             if (httpStatus.get() == HttpStatus.OK) {
                 responseMessageCode.set("weldingUploadOk");
             }
+        }else {
+            responseMessageCode.set("noModFilesFound");
         }
 
         return new ResponseEntity<>(responseMessageCode.get(), httpStatus.get());
@@ -126,7 +133,7 @@ public class UploadController {
     }
 
     private File makeUploadFolder() {
-        File uploadPlace = new File(System.getProperty("java.io.tmpdir"), uploadFolder);
+        File uploadPlace = new File(System.getProperty(Constants.TEMP_DIR), uploadFolder);
         if (!uploadPlace.exists()) {
             if (uploadPlace.mkdir()) {
                 logger.info("Folder " + uploadFolder + " has been created");

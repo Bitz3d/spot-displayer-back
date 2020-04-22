@@ -3,10 +3,7 @@ package pl.rafalab.spotdisplayer.Controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.rafalab.spotdisplayer.Commons.Mapper;
 import pl.rafalab.spotdisplayer.Models.Dtos.WeldingSpotsDto;
 import pl.rafalab.spotdisplayer.Models.MyUser;
@@ -19,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class WeldingSpotController {
 
     private final WeldingSpotService weldingSpotService;
@@ -41,6 +39,13 @@ public class WeldingSpotController {
         byMyUser.forEach(x -> weldingSpotsDtosSet.add(weldingSpotsDtoMapper.map(x)));
 
         return new ResponseEntity<>(weldingSpotsDtosSet, HttpStatus.OK);
+    }
+
+    @GetMapping("/models-names")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Set<String>> getAllUserModels(HttpServletRequest request) {
+        Set<String> distinctModelNameByUser = weldingSpotService.findDistinctModelNameByUser(usefulUtils.getUserFromRequest(request));
+        return new ResponseEntity<>(distinctModelNameByUser, HttpStatus.OK);
     }
 
     @GetMapping("/welding-spots/{model}")

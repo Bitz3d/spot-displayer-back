@@ -1,5 +1,6 @@
 package pl.rafalab.spotdisplayer.Services;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.XPath;
 import pl.rafalab.spotdisplayer.Models.MyUser;
 import pl.rafalab.spotdisplayer.Models.WeldingSpot;
 
@@ -11,6 +12,8 @@ public interface WeldingSpotService {
     WeldingSpot save(WeldingSpot weldingSpot);
 
     void saveAllWeldingSpots(List<WeldingSpot> weldingSpots);
+
+    Set<String> findDistinctModelNameByUser(MyUser myUser);
 
     Set<WeldingSpot> findByMyUser(MyUser username);
 

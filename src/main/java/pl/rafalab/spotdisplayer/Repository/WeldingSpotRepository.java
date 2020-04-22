@@ -28,4 +28,7 @@ public interface WeldingSpotRepository extends JpaRepository<WeldingSpot, Long> 
     @Query(value = "delete from welding_spot where my_user_id=:id", nativeQuery = true)
     void deleteAllByMyUser(@Param("id") long id);
 
+    @Query(value = "SELECT DISTINCT ws.model_name FROM welding_spot ws WHERE my_user_id=:id", nativeQuery = true)
+    Set<String> findDistinctModelNameByMyUser(@Param("id") long userId);
+
 }

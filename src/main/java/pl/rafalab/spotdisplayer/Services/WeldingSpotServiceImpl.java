@@ -29,6 +29,11 @@ public class WeldingSpotServiceImpl implements WeldingSpotService {
     }
 
     @Override
+    public Set<String> findDistinctModelNameByUser(MyUser myUser) {
+        return weldingSpotRepository.findDistinctModelNameByMyUser(myUser.getId());
+    }
+
+    @Override
     public Set<WeldingSpot> findByMyUser(MyUser username) {
         return weldingSpotRepository.findByMyUser(username);
     }
